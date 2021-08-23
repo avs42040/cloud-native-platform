@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: excalidraw
-  namespace: istio-system ## If using istio, certificate need to be created in istio-namespace
+  namespace: istio-system ## If using istio, certificate need to be created in istio-system
 spec:
   dnsNames:
     - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
@@ -17,7 +17,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: kiali
-  namespace: istio-namespace ## the secret will be created in this namepspace
+  namespace: istio-system ## the secret will be created in this namepspace
 spec:
   dnsNames:
     - kiali.infologistix-cnc.ddnss.org ## specify you domain name of your application here
@@ -31,7 +31,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: grafana
-  namespace: istio-namespace ## the secret will be created in this namepspace
+  namespace: istio-system ## the secret will be created in this namepspace
 spec:
   dnsNames:
     - grafana.infologistix-cnc.ddnss.org ## specify you domain name of your application here
@@ -45,7 +45,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: jaeger
-  namespace: istio-namespace ## the secret will be created in this namepspace
+  namespace: istio-system ## the secret will be created in this namepspace
 spec:
   dnsNames:
     - jaeger.infologistix-cnc.ddnss.org ## specify you domain name of your application here
@@ -59,7 +59,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: prometheus
-  namespace: istio-namespace ## the secret will be created in this namepspace
+  namespace: istio-system ## the secret will be created in this namepspace
 spec:
   dnsNames:
     - prometheus.infologistix-cnc.ddnss.org ## specify you domain name of your application here

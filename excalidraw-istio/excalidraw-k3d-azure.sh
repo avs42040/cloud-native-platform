@@ -31,9 +31,9 @@ kubectl -n cert-manager rollout status deploy cert-manager-webhook
 
 kubectl apply -f ./config/cert-issuer-istio-ingress.yaml ## Create clusterissuer for the certificates
 kubectl apply -f ./config/certificate.yaml ## request for the certificates
-kubectl apply -f ../cluster-config/istio-ingress-gateway-local.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
-kubectl apply -f ./config/excalidraw-virtualservice-local.yaml ## Apply Virtualservice for excalidraw
-kubectl apply -f ../cluster-config/istio-addons-gateway-local.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
+kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
+kubectl apply -f ./config/excalidraw-virtualservice-azure.yaml ## Apply Virtualservice for excalidraw
+kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
 kubectl apply -f ./config/excalidraw-peerauthentication.yaml ## Apply Peerauthentication, this will force communication in excalidraw namespace to use tls
 
 echo -e "\n"
