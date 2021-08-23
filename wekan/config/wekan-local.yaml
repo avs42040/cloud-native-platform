@@ -1,11 +1,4 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: wekan-project
-  labels:
-    name: wekan
----
+## Service of wekan deployment
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,6 +16,7 @@ spec:
     app: wekan
     version: v1
 ---
+## wekan deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,12 +43,12 @@ spec:
       - image: quay.io/wekan/wekan:v1.78
         name: wekan
         ports:
-        - containerPort: 8080
+        - containerPort: 8080 ## Port which wekan will use
           name: wekan
         env:
         - name: MONGO_URL
           value: mongodb://wekan:pass@mongodb:27017/wekan
         - name: PORT
-          value: "8080"
+          value: "8080" ## same as containerport
         - name: ROOT_URL
-          value: http://wekan.localhost
+          value: http://wekan.localhost ## This need to be matched to domain name of wekan app

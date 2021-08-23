@@ -9,8 +9,8 @@ k3d cluster create --api-port 6550 -p "80:80@loadbalancer" -p "443:443@loadbalan
 cp $(k3d kubeconfig write k3s-default) ~/.kube/config
 
 ## Install istio
-kubectl apply -f ./config/namespace.yaml ## create excalidraw namespace
-kubectl label namespace excalidraw istio-injection=enabled ## Add label "istio-injection=enabled" to excalidraw namespace
+kubectl create namespace wekan-project ## create the namespace
+kubectl label namespace wekan-project istio-injection=enabled ## Add label "istio-injection=enabled" to the namespace
 istioctl install -y ## Install istio
 kubectl apply -f istio-addons ## Deploy istio-addons (Kiali, Grafana, Prometheus, Jaeger)
 kubectl apply -f istio-addons ## It just need to be applied 2 times ***
@@ -19,33 +19,34 @@ kubectl apply -f istio-addons ## It just need to be applied 2 times ***
 kubectl -n istio-system rollout status deploy kiali
 kubectl -n istio-system rollout status deploy grafana
 
-## Deploy excalidraw
-kubectl apply -f ./config/deployment.yaml ## deploy excalidraw
-kubectl apply -f ./config/service.yaml ## create service for excalidraw deployment
+## Install Mongodb
+helm repo add stable https://charts.helm.sh/stable && helm repo update ## Add stable helm repository and update it
 
-## Install cert-manager + Generate certificate via Letsencrypt
-# kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml ## deploy cert-manager components
+## Install mongodb with 3 replicas using Helm (you can adjust number of replicas by changing it in values.yaml)
+helm install mongodb stable/mongodb -f values.yaml --namespace wekan-project --set mongodbRootPassword="pass",mongodbUsername="wekan",mongodbPassword="pass",mongodbDatabase="wekan"
 
-## Waiting for cert-manager to be deployed
-# kubectl -n cert-manager rollout status deploy cert-manager-webhook
+## Waiting for mongodb to deploy
+kubectl -n wekan-project rollout status statefulset.apps/mongodb-primary
+kubectl -n wekan-project rollout status statefulset.apps/mongodb-arbiter
+kubectl -n wekan-project rollout status statefulset.apps/mongodb-secondary
 
-# kubectl apply -f ./config/cert-issuer-istio-ingress.yaml ## Create clusterissuer for the certificates
-# kubectl apply -f ./config/certificate.yaml ## request for the certificates
-
-## Create secret contain certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
+## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
 kubectl apply -f ../cluster-config/tls-secret.yaml
 
+kubectl apply -f ./config/wekan-azure.yaml ## Apply Deployment and Service of Wekan app 
 kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
-kubectl apply -f ./config/excalidraw-virtualservice-azure.yaml ## Apply Virtualservice for excalidraw
+kubectl apply -f ./config/wekan-virtualservice-azure.yaml ## Apply Virtualservice for wekan
 kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
-kubectl apply -f ./config/excalidraw-peerauthentication.yaml ## Apply Peerauthentication, this will force communication in excalidraw namespace to use tls
 
 echo -e "\n"
-echo -e "App        -->             Link"
-echo -e "______________             _____________________________________________"
-echo -e "excalidraw -->             https://excalidraw.infologistix-cnc.ddnss.org"
+echo -e "App                        Link"
+echo -e "______________             ________________________________"
+echo -e "wekan      -->             https://wekan.infologistix-cnc.ddnss.org"
 echo -e "kiali      -->             https://kiali.infologistix-cnc.ddnss.org"
 echo -e "prometheus -->             https://prometheus.infologistix-cnc.ddnss.org"
 echo -e "grafana    -->             https://grafana.infologistix-cnc.ddnss.org"
 echo -e "jaeger     -->             https://jaeger.infologistix-cnc.ddnss.org"
 
+## kubectl exec -it mongodb-primary-0 -n wekan-project -- sh
+## mongo mongodb://wekan:pass@mongodb:27017/wekan
+## mongo mongodb://root:pass@mongodb:27017
