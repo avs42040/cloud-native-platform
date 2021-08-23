@@ -1,4 +1,4 @@
-## Certificate for excalidraw
+## Requesting certificate for excalidraw
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:

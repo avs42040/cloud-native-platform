@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: excalidraw
+  namespace: excalidraw ## the secret will be created in this namepspace
+spec:
+  secretName: tls-secret-excalidraw
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  acme:
+    config:
+      - http01:
+          ingressClass: istio
+        domains:
+          - "excalidraw.infologistix-cnc.ddnss.org"
