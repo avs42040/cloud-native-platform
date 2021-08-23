@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /   #new 
+  name: excalidraw
+  namespace: excalidraw
+spec:
+  tls:
+  - hosts:
+    - superset.infologistix-cnc.ddnss.org
+    secretName: tls-secret
+  rules:
+  - host: superset.infologistix-cnc.ddnss.org
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: excalidraw
+          servicePort: 80
+          #- path: /v2/hello
+          #backend:
+          #serviceName: example-service
+          #servicePort: 80

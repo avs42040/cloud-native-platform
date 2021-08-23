@@ -1,0 +1,96 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "excalidraw.localhost"
+    - "wekan.localhost"
+    - "rancher.localhost"
+    - "druid.localhost"
+    - "superset.localhost"
+    - "elastic.localhost"
+    - "hadoop.localhost"
+    - "zeppelin.localhost"
+
+  - port:
+      number: 443
+      name: https-excalidraw
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "excalidraw.localhost"
+  - port:
+      number: 443
+      name: https-wekan
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "wekan.localhost"
+  - port:
+      number: 443
+      name: https-rancher
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "rancher.localhost"
+  - port:
+      number: 443
+      name: https-druid
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "druid.localhost"
+  - port:
+      number: 443
+      name: https-superset
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "superset.localhost"
+  - port:
+      number: 443
+      name: https-elastic
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "elastic.localhost"
+  - port:
+      number: 443
+      name: https-hadoop
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "hadoop.localhost"
+  - port:
+      number: 443
+      name: https-zeppelin
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "zeppelin.localhost"
+

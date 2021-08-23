@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: confluent-vs
+  namespace: confluent
+spec:
+  hosts:
+  - confluent.infologistix-cnc.ddnss.org
+  gateways:
+  - istio-ingress-gateway.istio-system.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        #prefix: /confluent
+        prefix: /
+#    rewrite:
+#      uri: /sign-in
+    route:
+    - destination:
+        host: controlcenter.confluent.svc.cluster.local
+        port:
+          number: 9021
+#---
+#apiVersion: networking.istio.io/v1alpha3
+#kind: DestinationRule
+#metadata:
+#  name: confluent
+#  namespace: confluent
+#spec:

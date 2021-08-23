@@ -1,0 +1,56 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: rancher-gateway
+  namespace: cattle-system
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret-rancher # must be the same as secret
+    hosts:
+    - "rancher.infologistix-cnc.ddnss.org"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rancher
+  namespace: cattle-system
+spec:
+  hosts:
+  - "rancher.infologistix-cnc.ddnss.org"
+  gateways:
+  - rancher-gateway
+  http:
+  - match:
+    - uri:
+        #prefix: /rancher
+        prefix: /
+    #rewrite:
+    #  uri: /
+    route:
+    - destination:
+        host: rancher
+        port:
+          number: 80
+#---
+#apiVersion: networking.istio.io/v1alpha3
+#kind: DestinationRule
+#metadata:
+#  name: rancher
+#  namespace: rancher
+#spec:
+#  host: rancher
+#  trafficPolicy:
+#    tls:
+#      mode: ISTIO_MUTUAL
+#  subsets:
+#  - name: v1
+#    labels:
+#      version: v1

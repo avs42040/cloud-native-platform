@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: excalidraw
+  namespace: excalidraw
+spec:
+  dnsNames:
+    - infologistix-escalidraw.westeurope.cloudapp.azure.com
+  secretName: tls-secret
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer

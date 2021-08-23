@@ -1,0 +1,202 @@
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: accountSettings.wekan.accountSettings
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: activities.wekan.activities
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: announcements.wekan.announcements
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: boards.wekan.boards
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: cardcomments.wekan.card_comments
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: cards.wekan.cards
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: checklistItems.wekan.checklistItems
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: checklists.wekan.checklists
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: invitationcodes.wekan.invitation_codes
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: lists.wekan.lists
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: meteormigrations.wekan.meteor-migrations
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: meteoraccountsloginServiceConfiguration.wekan.meteor_accounts_loginServiceConfiguration
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: meteoroauthpendingCredentials.wekan.meteor_oauth_pendingCredentials
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: presences.wekan.presences
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: settings.wekan.settings
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: swimlanes.wekan.swimlanes
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: unsavededits.wekan.unsaved-edits
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: users.wekan.users
+  namespace: confluent
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"
+
+
+
+
+

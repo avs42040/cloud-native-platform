@@ -1,0 +1,36 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: excalidraw
+  namespace: excalidraw
+spec:
+  hosts:
+  - "excalidraw.localhost"
+  gateways:
+  - istio-system/istio-ingress-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    #rewrite:
+    #  uri: /
+    route:
+    - destination:
+        host: excalidraw.excalidraw.svc.cluster.local
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: excalidraw
+  namespace: excalidraw
+spec:
+  host: excalidraw
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1

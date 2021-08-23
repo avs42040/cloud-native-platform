@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: excalidraw
+  namespace: excalidraw
+  labels:
+    app: excalidraw
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: excalidraw
+      version: v1
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: excalidraw
+        version: v1
+    spec:
+      containers:
+      - name: excalidraw
+        image: excalidraw/excalidraw:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+############ Extra #############
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 80m
+            memory: 128Mi
+############ Volume #############
+#        volumeMounts:
+#        - name: excalidraw
+#          mountPath: /excalidraw
+#        securityContext:
+#          runAsUser: 1000
+#      volumes:
+#      - name: tmp
+#        emptyDir: {}

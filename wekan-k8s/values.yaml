@@ -1,0 +1,17 @@
+replicaSet:
+  ## Whether to create a MongoDB replica set for high availability or not
+  enabled: true
+  useHostnames: true
+
+  ## Name of the replica set
+  ##
+  name: rs0
+
+  ## Key used for replica set authentication
+  ##
+  # key: key
+
+  ## Number of replicas per each node type
+  ##
+  replicas:
+    secondary: 3

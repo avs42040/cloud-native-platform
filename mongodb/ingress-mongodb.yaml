@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  #annotations:
+  #  kubernetes.io/ingress.class: "nginx"
+  #  nginx.ingress.kubernetes.io/rewrite-target: /   #new 
+  name: mongo
+  #namespace: excalidraw
+spec:
+  rules:
+  #- host: mongo.localhost
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: mongo
+          servicePort: 27017
+
+
+
+
+  #- host: mongo-0.localhost
+  #  http:
+  #    paths:
+  #    - path: /
+  #      backend:
+  #        serviceName: mongo-0.mongo
+  #        servicePort: 27017
+  #- host: mongo-1.localhost
+  #  http:
+  #    paths:
+  #    - path: /
+  #      backend:
+  #        serviceName: mongo-1.mongo
+  #        servicePort: 27017
+  #- host: mongo-2.localhost
+  #  http:
+  #    paths:
+  #    - path: /
+  #      backend:
+  #        serviceName: mongo-2.mongo
+  #        servicePort: 27017
+         

@@ -1,0 +1,12 @@
+---
+clusterName: "multi"
+nodeGroup: "data"
+
+roles:
+  - data
+  - data_content
+  - data_hot
+  - data_warm
+  - data_cold
+  - data_frozen
+  - ingest

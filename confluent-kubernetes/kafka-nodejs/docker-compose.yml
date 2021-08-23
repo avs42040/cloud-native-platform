@@ -1,0 +1,45 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.0.0
+    container_name: zookeeper
+    restart: always
+    hostname: zookeeper
+    #ports:
+    #  - 2181:2181
+    networks:
+      - confluent
+    environment:
+      - ZOOKEEPER_SERVER_ID=1
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+      - ZOOKEEPER_INIT_LIMIT=5
+      - ZOOKEEPER_SYNC_LIMIT=2
+      - ZOOKEEPER_SERVERS=zookeeper:2888:3888 ##;zk-2:2888:3888;zk-3:2888:3888
+
+  kafka:
+    image: "confluentinc/cp-enterprise-kafka:5.0.0"
+    container_name: kafka
+    hostname: kafka
+    networks:
+      - confluent
+    environment:
+      KAFKA_BROKER_ID: 101
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 ##,zk-2:2181,zk-3:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_METRIC_REPORTERS: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka:9092"  ##,kafka-2:9092,kafka-3:9092"  
+
+  nodejs:
+    image: nurihaji/kafka-nodejs:latest
+    container_name: nodejs
+    ports:
+        - "8080:8080"
+    networks:
+        - confluent
+
+networks:
+    confluent:
