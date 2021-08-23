@@ -2,21 +2,22 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: excalidraw
-  namespace: excalidraw
+  namespace: excalidraw # Namespace of VirtualService need to be the same as application namespace
 spec:
   hosts:
-  - "excalidraw.localhost"
+  - "excalidraw.localhost" # Domain name of the service excalidraw
   gateways:
-  - istio-system/istio-ingress-gateway
+  - istio-system/istio-ingress-gateway # This should be the name of associated gateway
   http:
   - match:
     - uri:
-        prefix: /
+        #prefix: /excalidraw
+        prefix: / # 
     #rewrite:
     #  uri: /
     route:
     - destination:
-        host: excalidraw.excalidraw.svc.cluster.local
+        host: excalidraw.excalidraw.svc.cluster.local # Service of excalidraw deployment
         port:
           number: 80
 ---
@@ -24,13 +25,13 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: excalidraw
-  namespace: excalidraw
+  namespace: excalidraw # Namespace of VirtualService need to be the same as application namespace
 spec:
-  host: excalidraw
+  host: excalidraw.excalidraw.svc.cluster.local # Service of excalidraw deployment
   trafficPolicy:
     tls:
-      mode: ISTIO_MUTUAL
-  subsets:
-  - name: v1
-    labels:
-      version: v1
+      mode: ISTIO_MUTUAL # Enable mutual TLS
+  #subsets: # Apply in case of canary deployment
+  #- name: v1
+  #  labels:
+  #    version: v1

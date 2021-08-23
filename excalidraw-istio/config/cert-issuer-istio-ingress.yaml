@@ -10,5 +10,5 @@ spec:
       name: letsencrypt-cluster-issuer-key
     solvers:
     - http01:
-       ingressClass: istio
-         
+       ingress:
+         class: istio # Certificate will be requested through istio-ingress

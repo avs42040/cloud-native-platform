@@ -5,12 +5,10 @@ metadata:
   namespace: excalidraw
   labels:
     app: excalidraw
-    version: v1
 spec:
   selector:
     matchLabels:
       app: excalidraw
-      version: v1
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -21,7 +19,6 @@ spec:
     metadata:
       labels:
         app: excalidraw
-        version: v1
     spec:
       containers:
       - name: excalidraw
@@ -29,7 +26,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-############ Extra #############
+############ optional #############
         livenessProbe:
           httpGet:
             path: /
@@ -45,12 +42,4 @@ spec:
           requests:
             cpu: 80m
             memory: 128Mi
-############ Volume #############
-#        volumeMounts:
-#        - name: excalidraw
-#          mountPath: /excalidraw
-#        securityContext:
-#          runAsUser: 1000
-#      volumes:
-#      - name: tmp
-#        emptyDir: {}
+

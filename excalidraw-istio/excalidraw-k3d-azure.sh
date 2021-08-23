@@ -23,17 +23,14 @@ kubectl -n istio-system rollout status deploy grafana
 kubectl apply -f ./config/deployment.yaml ## deploy excalidraw
 kubectl apply -f ./config/service.yaml ## create service for excalidraw deployment
 
-## Generate certificate via Letsencrypt
-## Install cert-manager
+## Install cert-manager + Generate certificate via Letsencrypt
 kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml ## deploy cert-manager components
 
 ## Waiting for cert-manager to be deployed
 kubectl -n cert-manager rollout status deploy cert-manager-webhook
 
-kubectl apply -f ./config/cert-issuer-nginx-ingress.yaml ## Create clusterissuer for the certificates
+kubectl apply -f ./config/cert-issuer-istio-ingress.yaml ## Create clusterissuer for the certificates
 kubectl apply -f ./config/certificate.yaml ## request for the certificates
-#kubectl apply -f ../cluster-config/tls-secret.yaml
-
 kubectl apply -f ../cluster-config/istio-ingress-gateway-local.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
 kubectl apply -f ./config/excalidraw-virtualservice-local.yaml ## Apply Virtualservice for excalidraw
 kubectl apply -f ../cluster-config/istio-addons-gateway-local.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder

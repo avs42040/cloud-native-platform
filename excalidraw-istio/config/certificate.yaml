@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: excalidraw
-  namespace: excalidraw ## the secret will be created in this namepspace
+  namespace: istio-system ## If using istio, certificate need to be created in istio-namespace
 spec:
   dnsNames:
     - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
