@@ -23,15 +23,13 @@ kubectl apply -f ./config/deployment.yaml ## deploy excalidraw
 kubectl apply -f ./config/service.yaml ## create service for excalidraw deployment
 
 ## Install cert-manager
-kubectl create namespaces cert-manager ## cert-manager need its own namespace. We create one for it.
 kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml ## deploy cert-manager components
 
 ## Waiting for cert-manager to be deployed
-kubectl -n cert-manager rollout status deploy cert-manager
+kubectl -n cert-manager rollout status deploy cert-manager-webhook
 
 kubectl apply -f ./config/cert-issuer-nginx-ingress.yaml ## Create clusterissuer for the certificates
 kubectl apply -f ./config/certificate.yaml ## request for the certificates
-#kubectl apply -f ./config/tls-secret.yaml
 kubectl apply -f ./config/ingress-azure.yaml ## create ingress resource
 
 echo -e "excalidraw -->             https://excalidraw.infologistix-cnc.ddnss.org\n"
