@@ -1,0 +1,13 @@
+## Certificate for excalidraw
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: excalidraw
+  namespace: excalidraw ## the secret will be created in this namepspace
+spec:
+  dnsNames:
+    - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-excalidraw ## name of the secret, in which tls-key and cert will be saved
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer

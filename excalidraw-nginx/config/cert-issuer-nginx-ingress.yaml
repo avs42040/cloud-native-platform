@@ -2,11 +2,10 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-cluster-issuer
-  namespace: excalidraw
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: suphanat.aviphan@infologistix.de
+    email: suphanat.aviphan@infologistix.de # please change this in your E-Mail
     privateKeySecretRef:
       name: letsencrypt-cluster-issuer-key
     solvers:

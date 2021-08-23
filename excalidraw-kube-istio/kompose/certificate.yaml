@@ -1,12 +1,69 @@
+## Certificate for excalidraw
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: excalidraw
-  namespace: excalidraw
+  namespace: excalidraw ## the secret will be created in this namepspace
 spec:
   dnsNames:
-    - infologistix-cnc.ddnss.org
-  secretName: tls-secret
+    - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-excalidraw ## name of the secret, in which tls-key and cert will be saved
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+---
+## Certificate for kiali
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kiali
+  namespace: istio-namespace ## the secret will be created in this namepspace
+spec:
+  dnsNames:
+    - kiali.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-kiali ## name of the secret, in which tls-key and cert will be saved
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+---
+## Certificate for grafana
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana
+  namespace: istio-namespace ## the secret will be created in this namepspace
+spec:
+  dnsNames:
+    - grafana.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-grafana ## name of the secret, in which tls-key and cert will be saved
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+---
+## Certificate for jaeger
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jaeger
+  namespace: istio-namespace ## the secret will be created in this namepspace
+spec:
+  dnsNames:
+    - jaeger.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-jaeger ## name of the secret, in which tls-key and cert will be saved
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+---
+## Certificate for prometheus
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prometheus
+  namespace: istio-namespace ## the secret will be created in this namepspace
+spec:
+  dnsNames:
+    - prometheus.infologistix-cnc.ddnss.org ## specify you domain name of your application here
+  secretName: tls-secret-prometheus ## name of the secret, in which tls-key and cert will be saved
   issuerRef:
     name: letsencrypt-cluster-issuer
     kind: ClusterIssuer

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # comment this out, if you want to use traefik instead
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: excalidraw
+  namespace: excalidraw
+spec:
+  tls:
+  - hosts:
+    - excalidraw.infologistix-cnc.ddnss.org ## domain name of excalidraw
+    secretName: tls-secret-excalidraw ## name of the secret, in which contain tls-key and tls-cert
+  rules:
+  - host: excalidraw.infologistix-cnc.ddnss.org ## domain name of excalidraw
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: excalidraw
+          servicePort: 80
+
