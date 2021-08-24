@@ -38,6 +38,9 @@ kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Is
 kubectl apply -f ./config/wekan-virtualservice-azure.yaml ## Apply Virtualservice for wekan
 kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
 
+## Waiting for wekan to deploy
+kubectl -n wekan-project rollout status deployment.apps/wekan
+
 echo -e "\n"
 echo -e "App                        Link"
 echo -e "______________             ________________________________"

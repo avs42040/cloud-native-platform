@@ -1,38 +1,39 @@
 #! /bin/bash
 
-## Start k3d
-echo -e "\n############### Start k3d ################\n"
-../cluster-config/k3d/start-k3d-azure.sh
+## Start k3d cluster with loadbalancer on port 80 and 443 without traefik
+## If you want to use traefik, please remove "--k3s-server-arg="--no-deploy=traefik""
+echo -e "\n -- Start k3d --\n"
+k3d cluster create --api-port 6550 -p "80:80@loadbalancer" -p "443:443@loadbalancer" --k3s-server-arg="--no-deploy=traefik" --agents 1
+
+## Add kubeconfig of this k3d cluster
+cp $(k3d kubeconfig write k3s-default) ~/.kube/config
 
 ## Install istio
-kubectl create namespace confluent
+kubectl create namespace confluent ## create confluent namespace
+kubectl label namespace confluent istio-injection=enabled ## Add label "istio-injection=enabled" to excalidraw namespace
+istioctl install -y ## Install istio
+kubectl apply -f istio-addons ## Deploy istio-addons (Kiali, Grafana, Prometheus, Jaeger)
+kubectl apply -f istio-addons ## It just need to be applied 2 times ***
 
-istioctl install -y
-kubectl apply -f ../cluster-config/istio-1.10.1/samples/addons
-kubectl apply -f ../cluster-config/istio-1.10.1/samples/addons
-echo "Wait for istio-addon to start 40 secs"
-sleep 40
+## Waiting for ingress-nginx-controller to be deployed
+kubectl -n istio-system rollout status deploy kiali
+kubectl -n istio-system rollout status deploy grafana
 
-## Set this namespace to default for your Kubernetes context.
-#kubectl config set-context --current --namespace confluent
-
-## Add and install the Confluent for Kubernetes Helm repository.
-helm repo add confluentinc https://packages.confluent.io/helm
-helm repo update
+## Add and install the Confluent Operator for Kubernetes Helm repository in confluent namespace.
+helm repo add confluentinc https://packages.confluent.io/helm && helm repo update
 helm upgrade --install -n confluent confluent-operator confluentinc/confluent-for-kubernetes
 
 ## Install all Confluent Platform components. (https://raw.githubusercontent.com/confluentinc/confluent-kubernetes-examples/master/quickstart-deploy/confluent-platform.yaml)
 kubectl apply -f ./kompose/confluent-platform.yaml   
 ## Install a sample producer app and topic (https://raw.githubusercontent.com/confluentinc/confluent-kubernetes-examples/master/quickstart-deploy/producer-app-data.yaml)
 kubectl apply -f ./kompose/producer-app-data.yaml
-#kubectl apply -f ./kompose/kafka-topic.yaml  
+
+## Create secret contain certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
 kubectl apply -f ../cluster-config/tls-secret.yaml
 
-kubectl apply -f nodejs-producer.yaml
-#kubectl apply -f confluent-ingress.yaml
-kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml
-kubectl apply -f confluent-virtualservice-azure.yaml
-kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml
+kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
+kubectl apply -f confluent-virtualservice-azure.yaml ## Apply Virtualservice for confluent
+kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
 
 echo "Wait for confluent to start 450 secs"
 sleep 450

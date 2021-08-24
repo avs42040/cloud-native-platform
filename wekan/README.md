@@ -1,36 +1,32 @@
-#### Wekan on kubernetes
+# Install Wekan exposing with Istio-gateway
 
-Deploying in kubernetes requires an existing mongodb instance running already
-in the cluster. The Wekan deployment expects a service named `mongodb` on port
-`27017` installed.  
-You can install a mongodb instance with [helm](https://helm.sh).
+This folder contains scripts and configurations files for deploying wekan in k3d-cluster both local and in the cloud (Azure). Here, Istio-gateway will be used to expose wekan service via k3d-loadbalancer.
 
-e.g.:
+## Folder Structure
+- config (folder)
+
+This subfolder contains all yaml-configuration files, which are needed to deploy wekan.
+
+- istio-addons (folder)
+
+Contain YAML-config files used to install istio-addons (including Kiali, Prometheus, Grafana, Jaeger)
+
+- wekan-k3d-azure.sh (script)
+
+This script is used to deploy wekan in azure cloud environment. 
+To deploy wekan in k3d-cluster in azure cloud, just cd into this folder and run
 
 ```bash
-helm install --name mongodb stable/mongodb --namespace wekan-project --set mongodbRootPassword="pass",mongodbUsername="wekan",mongodbPassword="pass",mongodbDatabase="wekan"
-```
-The `--name` above will set, among other things, the name of the service that
-helm will create. Make sure that name matches the entry in the
-[deployment](wekan.yaml) configuration under service.  
-
-Replace the following value with the ones you have in the
-deployment file.
-
-```yaml
-- name: MONGO_URL
-  value: mongodb://wekan:pass@mongodb:27017/wekan
-- name: PORT
-  value: "8080"
-- name: ROOT_URL
-  value: http://my.domain.com
+./wekan-k3d-azure.sh
 ```
 
-#### Ingress
+- wekan-k3d-local.sh (script)
 
-Replace
+This script is used to deploy wekan in your local environment.
+To deploy wekan in k3d-cluster in your local machine, just cd into this folder and run
 
-```yaml
-  - host: my.domain.com
+```bash
+./wekan-k3d-local.sh
 ```
-with the proper subdomain name your kubernetes ingress manages.
+
+Ps. For further detail please refer to comments in scripts and configuration files
