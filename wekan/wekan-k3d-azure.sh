@@ -43,7 +43,7 @@ kubectl -n wekan-project rollout status deployment.apps/wekan
 
 echo -e "\n"
 echo -e "App                        Link"
-echo -e "______________             ________________________________"
+echo -e "______________             ________________________________________"
 echo -e "wekan      -->             https://wekan.infologistix-cnc.ddnss.org"
 echo -e "kiali      -->             https://kiali.infologistix-cnc.ddnss.org"
 echo -e "prometheus -->             https://prometheus.infologistix-cnc.ddnss.org"
