@@ -2,28 +2,18 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: confluent-vs
-  namespace: confluent
+  namespace: confluent ## The Virtualservice should be created in confluent namespace
 spec:
   hosts:
-  - confluent.infologistix-cnc.ddnss.org
+  - confluent.infologistix-cnc.ddnss.org ## define domain name of confluent here
   gateways:
-  - istio-ingress-gateway.istio-system.svc.cluster.local
+  - istio-ingress-gateway.istio-system.svc.cluster.local ## name of istio-gateway
   http:
   - match:
     - uri:
-        #prefix: /confluent
-        prefix: /
-#    rewrite:
-#      uri: /sign-in
+        prefix: / 
     route:
     - destination:
-        host: controlcenter.confluent.svc.cluster.local
+        host: controlcenter.confluent.svc.cluster.local ## name of service of controlcenter
         port:
-          number: 9021
-#---
-#apiVersion: networking.istio.io/v1alpha3
-#kind: DestinationRule
-#metadata:
-#  name: confluent
-#  namespace: confluent
-#spec:
+          number: 9021 ## port of service of controlcenter

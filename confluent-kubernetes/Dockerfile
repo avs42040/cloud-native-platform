@@ -1,11 +1,15 @@
 FROM confluentinc/cp-server-connect-operator:6.1.0.0
 USER root
 
-ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
+## Define environment variables of connector
 
+## Where should connector binary be stored
+ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components" 
 ENV CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+## Name of service of Schemaregistry
 ENV CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schemaregistry:8081'
 ENV CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+## Name of service of Schemaregistry
 ENV CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schemaregistry:8081'
 ENV CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
 ENV CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
@@ -15,6 +19,7 @@ ENV CLASSPATH: "/usr/share/java/monitoring-interceptors/monitoring-interceptors-
 ENV CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
 ENV CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
 
+## Adding connectors binary to kafka-connect
 RUN confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:latest
 RUN confluent-hub install --no-prompt debezium/debezium-connector-mongodb:1.6.0
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.5.0
@@ -41,4 +46,5 @@ RUN confluent-hub install --no-prompt confluentinc/kafka-connect-json-schema-con
 RUN confluent-hub install --no-prompt jcustenborder/kafka-connect-redis:0.0.2.13
 RUN confluent-hub install --no-prompt neo4j/kafka-connect-neo4j:1.0.9
 
+## Change authority back to normal user
 USER 1001

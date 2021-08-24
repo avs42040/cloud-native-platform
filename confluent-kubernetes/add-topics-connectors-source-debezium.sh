@@ -1,5 +1,9 @@
 #! /bin/bash
 
+## Exec into kafka-pod and run command to add kafka-topics to store data from mongodb
+## We cannot create topic using yaml-file, if a topic contain "_"
+## We cannot change the name of topics, because they need to match with name of collections in mongodb, which are pre-define by wekan
+
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.accountSettings --partitions 1 --replication-factor 3
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.activities --partitions 1 --replication-factor 3
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.announcements --partitions 1 --replication-factor 3
@@ -23,6 +27,8 @@ kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.swimlanes --partitions 1 --replication-factor 3
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.unsaved-edits --partitions 1 --replication-factor 3
 kubectl exec -it -n confluent kafka-0 -- kafka-topics --bootstrap-server kafka:9092 --create --topic wekan.wekan.users --partitions 1 --replication-factor 3
+
+## Run commands to use connector to let topics consume data from each associated collections in mongodb
 
 kubectl exec -it -n confluent connect-0 -- curl -X POST -H "Content-Type: application/json" --data '
   {"name": "mongo-source-wekan-accountSettings", 
