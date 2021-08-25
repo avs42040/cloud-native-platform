@@ -53,3 +53,4 @@ echo -e "jaeger     -->             https://jaeger.infologistix-cnc.ddnss.org"
 ## kubectl exec -it mongodb-primary-0 -n wekan-project -- sh
 ## mongo mongodb://wekan:pass@mongodb:27017/wekan
 ## mongo mongodb://root:pass@mongodb:27017
+## mongo mongodb://root:pass@mongodb-headless.wekan-project.svc.cluster.local:27017

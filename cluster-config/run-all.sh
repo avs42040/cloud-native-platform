@@ -40,27 +40,6 @@ kubectl apply -f istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using 
 
 ################################################################################################################################################################
 
-cd ../fluentd
-
-## Add helm repository for fluentd and elasticsearch, then update the repository
-helm repo add fluent https://fluent.github.io/helm-charts
-helm repo add elastic https://helm.elastic.co
-helm repo update
-
-## Install elasticsearch (2 replicas because we deploy 2 nodes) and kibana
-helm upgrade --install -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
-helm upgrade --install -n fluentd --set replicas=2 elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
-kubectl -n fluentd rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
-kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed
-
-## Install fluentd
-helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd
-kubectl -n fluentd rollout status daemonset.apps/fluentd ## Waiting for fluentd to be deployed
-
-kubectl apply -f ./config/fluentd-virtualservice-azure.yaml ## Apply Virtualservice for fluentd
-
-################################################################################################################################################################
-
 cd ../excalidraw-istio ## change directory to excalidraw-istio folder
 
 ## Deploy excalidraw
@@ -163,6 +142,27 @@ kubectl -n superset rollout status deployment.apps/superset
 kubectl -n superset rollout status deployment.apps/superset-worker
 
 kubectl apply -f config/superset-virtualservice-azure.yaml ## Apply Virtualservice for superset
+
+################################################################################################################################################################
+
+cd ../fluentd
+
+## Add helm repository for fluentd and elasticsearch, then update the repository
+helm repo add fluent https://fluent.github.io/helm-charts
+helm repo add elastic https://helm.elastic.co
+helm repo update
+
+## Install elasticsearch (2 replicas because we deploy 2 nodes) and kibana
+helm upgrade --install -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
+helm upgrade --install -n fluentd --set replicas=2 elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
+kubectl -n fluentd rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
+kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed
+
+## Install fluentd
+helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd
+kubectl -n fluentd rollout status daemonset.apps/fluentd ## Waiting for fluentd to be deployed
+
+kubectl apply -f ./config/fluentd-virtualservice-azure.yaml ## Apply Virtualservice for fluentd
 
 ################################################################################################################################################################
 

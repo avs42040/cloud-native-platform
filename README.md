@@ -7,7 +7,8 @@ SSD 32 Gb
 
 If use Window, use VM or WSL
 
-Folder structure --> !!!explain usage of each folder (and for what are each application in short form)!!!
+Folder structure --> !!!explain usage of each folder (and for what are each application in short form)!!! +++ define link to documention page of that app
+
 - each folder contain single service --> in each folder contains specific README.md that you can refer to each services
 - run-all.sh to run all service
 - every service use istio except excalidraw and rancher
