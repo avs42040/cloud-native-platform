@@ -29,7 +29,7 @@ kubectl -n superset rollout status deployment.apps/superset-worker
 ## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
 kubectl apply -f ../cluster-config/tls-secret.yaml
 
-kubectl apply -f deploy/superset-virtualservice-azure.yaml ## Apply Virtualservice for superset
+kubectl apply -f config/superset-virtualservice-azure.yaml ## Apply Virtualservice for superset
 kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
 kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
 
