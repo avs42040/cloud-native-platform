@@ -1,5 +1,7 @@
 #! /bin/bash
 
+## This script adds druid-connector to sink data from kafka-topic in confluent
+
 kubectl exec -it -n confluent connect-0 -- curl -X POST -H "Content-Type: application/json" --data '
   {
     "type": "kafka",

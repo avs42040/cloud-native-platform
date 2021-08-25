@@ -1,3 +1,4 @@
+## Install druid operator
 apiVersion: apps/v1
 kind: Deployment
 metadata:

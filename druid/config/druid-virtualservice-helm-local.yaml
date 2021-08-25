@@ -1,3 +1,4 @@
+## Virtualservice for installing druid using helm in your local machine
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -17,15 +18,4 @@ spec:
         host: druid-router.druid.svc.cluster.local
         port:
           number: 8888
-#---
-#apiVersion: networking.istio.io/v1alpha3
-#kind: DestinationRule
-#metadata:
-#  name: druid
-#  namespace: druid
-#spec:
-#  host: druid
-#  trafficPolicy:
-#    tls:
-#      mode: ISTIO_MUTUAL
 
