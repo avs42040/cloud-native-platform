@@ -24,11 +24,11 @@ helm repo add fluent https://fluent.github.io/helm-charts
 helm repo add elastic https://helm.elastic.co
 helm repo update
 
-## Install elasticsearch and kibana
-helm upgrade --install -f ./helm-charts-elastic/kibana/values.yaml -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
-helm upgrade --install -f ./helm-charts-elastic/elasticsearch/values.yaml -n fluentd elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
+## Install elasticsearch (2 replicas because we deploy 2 nodes) and kibana
+helm upgrade --install -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
+helm upgrade --install -n fluentd --set replicas=2 elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
 kubectl -n fluentd rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
-kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed 
+kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed
 
 ## Install fluentd
 helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd

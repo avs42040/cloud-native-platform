@@ -19,6 +19,7 @@ kubectl apply -f istio-addons ## It just need to be applied 2 times ***
 kubectl -n istio-system rollout status deploy kiali
 kubectl -n istio-system rollout status deploy grafana
 
+## Install superset using helm
 helm repo add superset https://apache.github.io/superset && helm repo update ## Add superset helm repository and update it
 helm upgrade --install -f ./helm/superset/values.yaml -n superset superset superset/superset ## Install superset using helm with values.yaml
 

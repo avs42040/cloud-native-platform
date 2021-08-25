@@ -19,6 +19,7 @@ kubectl apply -f istio-addons ## It just need to be applied 2 times ***
 kubectl -n istio-system rollout status deploy kiali
 kubectl -n istio-system rollout status deploy grafana
 
+## Install druid using helm
 helm repo add incubator https://charts.helm.sh/incubator && helm repo update ## Add incubator helm repository and update it
 helm upgrade --install -f ./helm/druid/values.yaml -n druid druid incubator/druid ## Install druid using helm with values.yaml in druid namespace
 
