@@ -25,13 +25,13 @@ helm repo add elastic https://helm.elastic.co
 helm repo update
 
 ## Install elasticsearch and kibana
-helm upgrade --install -f ./helm-charts-elastic/kibana/values.yaml -n fluentd kibana ./helm-charts-elastic/kibana
-helm upgrade --install -f ./helm-charts-elastic/elasticsearch/values.yaml -n fluentd elasticsearch ./helm-charts-elastic/elasticsearch
+helm upgrade --install -f ./helm-charts-elastic/kibana/values.yaml -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
+helm upgrade --install -f ./helm-charts-elastic/elasticsearch/values.yaml -n fluentd elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
 kubectl -n fluentd rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
 kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed 
 
 ## Install fluentd
-helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd ./helm-charts-fluentd/charts/fluentd
+helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd
 kubectl -n fluentd rollout status daemonset.apps/fluentd ## Waiting for fluentd to be deployed
 
 ## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
