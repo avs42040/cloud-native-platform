@@ -1,3 +1,4 @@
+# Deploy druid cluster spec
 # This spec only works on a single node kubernetes cluster(e.g. typical k8s cluster setup for dev using kind/minikube or single node AWS EKS cluster etc)
 # as it uses local disk as "deep storage".
 #

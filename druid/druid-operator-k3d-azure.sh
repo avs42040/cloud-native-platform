@@ -38,10 +38,10 @@ kubectl create -f config/operator.yaml
 kubectl -n druid rollout status deployment.apps/druid-operator
 
 # deploy single node zookeeper
-kubectl apply -f examples/tiny-cluster-zk.yaml
+kubectl apply -f config/tiny-cluster-zk.yaml
 
 # deploy druid cluster spec
-kubectl apply -f examples/tiny-cluster.yaml
+kubectl apply -f config/tiny-cluster.yaml
 
 ## Waiting for druid to be deployed
 sleep 5

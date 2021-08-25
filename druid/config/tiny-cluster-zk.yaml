@@ -1,4 +1,4 @@
----
+# deploy single node zookeeper
 apiVersion: v1
 kind: Service
 metadata:
