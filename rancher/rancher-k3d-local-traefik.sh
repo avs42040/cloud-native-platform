@@ -26,14 +26,14 @@ helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system 
 ## Waiting for rancher to deploy
 echo -e "\n -- Waiting for rancher to deploy --\n"
 kubectl -n cattle-system rollout status deployment.apps/rancher
-sleep 40
+sleep 30
 kubectl -n fleet-system rollout status deployment.apps/fleet-controller
-sleep 5
+sleep 10
 kubectl -n fleet-system rollout status deployment.apps/fleet-agent
 sleep 10
-kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
-sleep 5
 kubectl -n rancher-operator-system rollout status deployment.apps/rancher-operator
+sleep 10
+kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
 echo -e "\n -- Successful !"
 
 echo -e "\n"

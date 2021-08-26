@@ -11,13 +11,11 @@ cp $(k3d kubeconfig write k3s-default) ~/.kube/config
 ## Install istio
 ## create the namespace
 kubectl create namespace cattle-system 
-kubectl create namespace cert-manager 
 kubectl create namespace fleet-system 
 kubectl create namespace rancher-operator-system 
 
 ## Add label "istio-injection=enabled" to the namespace
 kubectl label namespace cattle-system istio-injection=enabled
-kubectl label namespace cert-manager istio-injection=enabled
 kubectl label namespace fleet-system istio-injection=enabled
 kubectl label namespace rancher-operator-system istio-injection=enabled
 
@@ -39,20 +37,23 @@ kubectl -n cert-manager rollout status deploy cert-manager-webhook
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable && helm repo update ## Add rancher-stable helm repository and update it
 
 ## Deploy rancher using helm in namespace cattle-system. Please specify domain name of Rancher using --set hostname option. At local machine, we will let Rancher generate its own self-sign certificate
-helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.infologistix-cnc.ddnss.org --wait
+helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.infologistix-cnc.ddnss.org --set ingress.tls.source=letsEncrypt --set letsEncrypt.email=suphanat.aviphan@infologistix.de --wait
 
 ## Waiting for rancher to deploy
 echo -e "\n -- Waiting for rancher to deploy --\n"
 kubectl -n cattle-system rollout status deployment.apps/rancher
-sleep 60
+sleep 30
 kubectl -n fleet-system rollout status deployment.apps/fleet-controller
-sleep 5
+sleep 10
 kubectl -n fleet-system rollout status deployment.apps/fleet-agent
-sleep 5
-kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
-sleep 5
+sleep 10
 kubectl -n rancher-operator-system rollout status deployment.apps/rancher-operator
+sleep 10
+kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
 echo -e "\n -- Successful !"
+
+## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
+kubectl apply -f ../cluster-config/tls-secret.yaml
 
 kubectl apply -f ./config/rancher-virtualservice-azure.yaml ### Apply Gateway and Virtualservice for rancher
 kubectl apply -f ../cluster-config/istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)

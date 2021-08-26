@@ -44,15 +44,18 @@ helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system 
 ## Waiting for rancher to deploy
 echo -e "\n -- Waiting for rancher to deploy --\n"
 kubectl -n cattle-system rollout status deployment.apps/rancher
-sleep 60
+sleep 30
 kubectl -n fleet-system rollout status deployment.apps/fleet-controller
-sleep 5
+sleep 10
 kubectl -n fleet-system rollout status deployment.apps/fleet-agent
-sleep 5
-kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
-sleep 5
+sleep 10
 kubectl -n rancher-operator-system rollout status deployment.apps/rancher-operator
+sleep 10
+kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
 echo -e "\n -- Successful !"
+
+## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
+kubectl apply -f ../cluster-config/tls-secret.yaml
 
 kubectl apply -f ./config/rancher-virtualservice-local.yaml ### Apply Gateway and Virtualservice for rancher
 kubectl apply -f ../cluster-config/istio-ingress-gateway-local.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
