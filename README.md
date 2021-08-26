@@ -7,7 +7,18 @@ SSD 32 Gb
 
 If use Window, use VM or WSL
 
+how to Getting Started
+
+how to clean up the project
+
+It might take around 25-30 min to deploy run-all.sh
+
+if you break something, just delete cluster and start it again
+
+
 Folder structure --> !!!explain usage of each folder (and for what are each application in short form)!!! +++ define link to documention page of that app
+
+how most of the folder and script are constructed
 
 - each folder contain single service --> in each folder contains specific README.md that you can refer to each services
 - run-all.sh to run all service
@@ -67,4 +78,7 @@ At least port 80 and 443 are needed to be opened.
 This demo only use k3d to deploy all services on Ubuntu linux distribution. Please free to adjust and use other Linux or Kubernetes distribution
 
 If any binary is missing, you can use our script in folder "Installation" to install the missing binary
+
+If you have other suggestion, or what this demo can be improve plase feel free to reach us
+
 

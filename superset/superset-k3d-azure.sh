@@ -25,6 +25,7 @@ helm upgrade --install -f ./helm/superset/values.yaml -n superset superset super
 
 ## Waiting for superset to be deployed
 kubectl -n superset rollout status deployment.apps/superset
+kubectl -n superset rollout status deployment.apps/superset
 kubectl -n superset rollout status deployment.apps/superset-worker
 
 ## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)

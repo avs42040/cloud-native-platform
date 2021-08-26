@@ -139,6 +139,7 @@ helm upgrade --install -f ./helm/superset/values.yaml -n superset superset super
 
 ## Waiting for superset to be deployed
 kubectl -n superset rollout status deployment.apps/superset
+kubectl -n superset rollout status deployment.apps/superset
 kubectl -n superset rollout status deployment.apps/superset-worker
 
 kubectl apply -f config/superset-virtualservice-azure.yaml ## Apply Virtualservice for superset
