@@ -2,10 +2,10 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: rancher-vs
-  namespace: cattle-system
+  namespace: cattle-system ## Virtualservice will be deployed in the same namespace as rancher
 spec:
   hosts:
-  - "rancher.infologistix-cnc.ddnss.org"
+  - "rancher.infologistix-cnc.ddnss.org" ## domain name of rancher
   gateways:
   - istio-system/istio-ingress-gateway ## Name of istio-gateway
   http:
@@ -14,6 +14,6 @@ spec:
         prefix: /
     route:
     - destination:
-        host: rancher
+        host: rancher ## url of service of rancher
         port:
           number: 80

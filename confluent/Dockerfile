@@ -1,3 +1,6 @@
+## This dockerfile is used to create docker image from confluentinc/cp-server-connect-operator as base-image. 
+## Here you can adjust env variable of kafka-connect and install connectors.
+
 FROM confluentinc/cp-server-connect-operator:6.1.0.0
 USER root
 
@@ -19,7 +22,7 @@ ENV CLASSPATH: "/usr/share/java/monitoring-interceptors/monitoring-interceptors-
 ENV CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
 ENV CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
 
-## Adding connectors binary to kafka-connect
+## Installing connectors to kafka-connect
 RUN confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:latest
 RUN confluent-hub install --no-prompt debezium/debezium-connector-mongodb:1.6.0
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.5.0

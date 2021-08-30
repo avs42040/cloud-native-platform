@@ -4,97 +4,88 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: istio-ingress-addon-gateway
-  namespace: istio-system
+  namespace: istio-system ## Gateway should be deployed in istio-system namespace
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingressgateway # use istio default controller
   servers:
-  - port:
+  - port: ## enable domain names on port 80
       number: 80
       name: http
       protocol: HTTP
-    hosts:
+    hosts: ## Add more domain names here
     - "grafana.infologistix-cnc.ddnss.org"
     - "kiali.infologistix-cnc.ddnss.org"
     - "prometheus.infologistix-cnc.ddnss.org"
     - "jaeger.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on grafana domain name
       number: 443
       name: https-grafana
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: tls-secret-grafana # must be the same as secret
+      credentialName: tls-secret-grafana # must be the same as secret name containing tls-certificate for grafana
     hosts:
     - "grafana.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on kiali domain name
       number: 443
       name: https-kiali
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: tls-secret-kiali # must be the same as secret
+      credentialName: tls-secret-kiali # must be the same as secret name containing tls-certificate for kiali
     hosts:
     - "kiali.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on prpmetheus domain name
       number: 443
       name: https-prometheus
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: tls-secret-prometheus # must be the same as secret
+      credentialName: tls-secret-prometheus # must be the same as secret name containing tls-certificate for prometheus
     hosts:
     - "prometheus.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on jaeger domain name
       number: 443
       name: https-jaeger
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: tls-secret-jaeger # must be the same as secret
+      credentialName: tls-secret-jaeger # must be the same as secret name containing tls-certificate for jaeger
     hosts:
     - "jaeger.infologistix-cnc.ddnss.org"
----
 ######################################################### Grafana #############################################################
+## Virtualservice for Grafana service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: grafana-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "grafana.infologistix-cnc.ddnss.org"
+  - "grafana.infologistix-cnc.ddnss.org" ## domain name of grafana
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: grafana
+        host: grafana ## Name of the service
         port:
-          number: 3000
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: grafana
-  namespace: istio-system
-spec:
-  host: grafana
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----      
+          number: 3000    
 ######################################################### Kiali #############################################################
+## Virtualservice for Kiali service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: kiali-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "kiali.infologistix-cnc.ddnss.org"
+  - "kiali.infologistix-cnc.ddnss.org" ## domain name of kiali
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - match:
     - uri:
@@ -103,76 +94,43 @@ spec:
     #  uri: /kiali
     route:
     - destination:
-        host: kiali
+        host: kiali ## Name of the service
         port:
           number: 20001
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: kiali
-  namespace: istio-system
-spec:
-  host: kiali
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----
 ######################################################### prometheus #############################################################
+## Virtualservice for Prometheus service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: prometheus-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "prometheus.infologistix-cnc.ddnss.org"
+  - "prometheus.infologistix-cnc.ddnss.org" ## domain name of prometheus
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: prometheus
+        host: prometheus ## Name of the service
         port:
           number: 9090
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: prometheus
-  namespace: istio-system
-spec:
-  host: prometheus
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----
 ######################################################### jaeger #############################################################
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: jaeger-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "jaeger.infologistix-cnc.ddnss.org"
+  - "jaeger.infologistix-cnc.ddnss.org" ## domain name of jaeger
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: tracing
+        host: tracing ## Name of the service
         port:
           number: 80
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: jaeger
-  namespace: istio-system
-spec:
-  host: jaeger
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----

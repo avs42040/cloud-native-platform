@@ -7,9 +7,9 @@
 ## --name --> defining name of container
 
 docker run -d --restart=unless-stopped \
--p 8080:80 -p 8443:443 \
+-p 8081:80 -p 4430:443 \
 --privileged \
 --name rancher \
 rancher/rancher:latest
 
-echo "Rancher is accessible locally at https://localhost:8443/"
+echo "Rancher is accessible locally at https://localhost:4430/"

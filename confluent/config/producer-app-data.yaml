@@ -1,5 +1,5 @@
-## kubectl apply -f https://raw.githubusercontent.com/confluentinc/confluent-kubernetes-examples/master/quickstart-deploy/producer-app-data.yaml
-## This script will run command "kafka-producer-perf-test" to generate data to topic "elastic-0"
+## This script will run command "kafka-producer-perf-test" from kafka to generate random data to topic "elastic-0" steadily.
+## To check whether it works, please see messages in topic "elastic-0"
 
 ## Secret contains client configurations
 apiVersion: v1
@@ -55,7 +55,7 @@ spec:
           secret:
             secretName: kafka-client-config           
 ---
-## Service for kafka-instance
+## headless-service for kafka-instance
 apiVersion: v1
 kind: Service
 metadata:

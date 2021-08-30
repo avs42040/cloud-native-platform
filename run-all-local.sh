@@ -1,9 +1,9 @@
 #! /bin/bash
 
-## Start k3d cluster with loadbalancer on port 80 and 443 without traefik
+## Start k3d cluster with loadbalancer mapping cluster port 80 --> 8081 and 443 --> 4430 without traefik
 ## If you want to use traefik, please remove "--k3s-server-arg="--no-deploy=traefik""
 echo -e "\n -- Start k3d --\n"
-k3d cluster create --api-port 6550 -p "80:80@loadbalancer" -p "443:443@loadbalancer" --k3s-server-arg="--no-deploy=traefik" --agents 1
+k3d cluster create --api-port 6550 -p "8081:80@loadbalancer" -p "4430:443@loadbalancer" --k3s-server-arg="--no-deploy=traefik" --agents 1
 
 ## Add kubeconfig of this k3d cluster
 cp $(k3d kubeconfig write k3s-default) ~/.kube/config
@@ -14,7 +14,10 @@ kubectl create namespace wekan-project
 kubectl create namespace confluent
 kubectl create namespace druid
 kubectl create namespace superset
-kubectl create namespace fluentd
+kubectl create namespace efk
+kubectl create namespace cattle-system
+kubectl create namespace fleet-system
+kubectl create namespace rancher-operator-system
 
 ## Add label "istio-injection=enabled" to every namespaces for every service
 kubectl label namespace excalidraw istio-injection=enabled
@@ -22,7 +25,14 @@ kubectl label namespace wekan-project istio-injection=enabled
 kubectl label namespace confluent istio-injection=enabled
 kubectl label namespace druid istio-injection=enabled
 kubectl label namespace superset istio-injection=enabled
-kubectl label namespace fluentd istio-injection=enabled
+kubectl label namespace efk istio-injection=enabled
+kubectl label namespace cattle-system istio-injection=enabled
+kubectl label namespace fleet-system istio-injection=enabled
+kubectl label namespace rancher-operator-system istio-injection=enabled
+
+################################################################################################################################################################
+
+cd ../cluster-config ## change directory to cluster-config folder
 
 ## Install istio
 istioctl install -y
@@ -35,8 +45,8 @@ kubectl -n istio-system rollout status deploy grafana
 
 ## Create secret containing certificate of each application (We cannot request certificate from letsencrypt many times in a day, therefore we create it once and save it as YAML-config file)
 kubectl apply -f tls-secret.yaml
-kubectl apply -f istio-addons-gateway-azure.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
-kubectl apply -f istio-ingress-gateway-azure.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
+kubectl apply -f istio-addons-gateway-local.yaml ## Deploy Istio Gateway/Virtualservice/DestinationRule for Istio-addons using config-file from cluster-configuration folder
+kubectl apply -f istio-ingress-gateway-local.yaml ## Deploy Istio-Gateway using config-file from cluster-configuration folder (Apply to all services in the system)
 
 ################################################################################################################################################################
 
@@ -45,7 +55,7 @@ cd ../excalidraw-istio ## change directory to excalidraw-istio folder
 ## Deploy excalidraw
 kubectl apply -f ./config/deployment.yaml ## deploy excalidraw
 kubectl apply -f ./config/service.yaml ## create service for excalidraw deployment
-kubectl apply -f ./config/excalidraw-virtualservice-azure.yaml ## Apply Virtualservice for excalidraw
+kubectl apply -f ./config/excalidraw-virtualservice-local.yaml ## Apply Virtualservice for excalidraw
 kubectl apply -f ./config/excalidraw-peerauthentication.yaml ## Apply Peerauthentication, this will force communication in excalidraw namespace to use tls
 
 ################################################################################################################################################################
@@ -64,15 +74,15 @@ kubectl -n wekan-project rollout status statefulset.apps/mongodb-arbiter
 kubectl -n wekan-project rollout status statefulset.apps/mongodb-secondary
 
 ## Deploy wekan
-kubectl apply -f ./config/wekan-azure.yaml ## Apply Deployment and Service of Wekan app
-kubectl apply -f ./config/wekan-virtualservice-azure.yaml ## Apply Virtualservice for wekan
+kubectl apply -f ./config/wekan-local.yaml ## Apply Deployment and Service of Wekan app
+kubectl apply -f ./config/wekan-virtualservice-local.yaml ## Apply Virtualservice for wekan
 
 ## Waiting for wekan to deploy
 kubectl -n wekan-project rollout status deployment.apps/wekan
 
 ################################################################################################################################################################
 
-cd ../confluent-kubernetes ## change directory to confluent-kubernetes folder
+cd ../confluent ## change directory to confluent folder
 
 ## Add and install the Confluent Operator for Kubernetes Helm repository in confluent namespace.
 echo -e "\n -- Install confluent-operator --\n"
@@ -102,7 +112,7 @@ kubectl -n confluent rollout status statefulset.apps/controlcenter
 ## Install a sample producer app and topic (https://raw.githubusercontent.com/confluentinc/confluent-kubernetes-examples/master/quickstart-deploy/producer-app-data.yaml)
 kubectl apply -f ./config/producer-app-data.yaml
 
-kubectl apply -f confluent-virtualservice-azure.yaml ## Apply Virtualservice for confluent
+kubectl apply -f ./config/confluent-virtualservice-local.yaml ## Apply Virtualservice for confluent
 
 ./add-topics-connectors-source-debezium.sh ## Add kafka-connector (source) from debezium to connect with mongodb from wekan app (we use the one from debezium, because its JSON-data is readable by druid)
 #./add-topics-connectors-source-confluent.sh ## Add kafka-connector (source) from confluent to connect with mongodb from wekan app
@@ -125,7 +135,7 @@ kubectl -n druid rollout status statefulset.apps/druid-historical
 kubectl -n druid rollout status statefulset.apps/druid-postgresql
 kubectl -n druid rollout status statefulset.apps/druid-zookeeper
 
-kubectl apply -f config/druid-virtualservice-helm-azure.yaml ## Apply Virtualservice for druid
+kubectl apply -f config/druid-virtualservice-helm-local.yaml ## Apply Virtualservice for druid
 
 ./druid-ingestion.sh ## generate druid connector to sink data from kafka-topic in confluent (please activate this only if you also deploy confluent with data from wekan in kafka-topics)
 
@@ -142,11 +152,11 @@ kubectl -n superset rollout status deployment.apps/superset
 kubectl -n superset rollout status deployment.apps/superset
 kubectl -n superset rollout status deployment.apps/superset-worker
 
-kubectl apply -f config/superset-virtualservice-azure.yaml ## Apply Virtualservice for superset
+kubectl apply -f config/superset-virtualservice-local.yaml ## Apply Virtualservice for superset
 
 ################################################################################################################################################################
 
-cd ../fluentd
+cd ../efk-stack ## change directory to efk folder
 
 ## Add helm repository for fluentd and elasticsearch, then update the repository
 helm repo add fluent https://fluent.github.io/helm-charts
@@ -154,16 +164,47 @@ helm repo add elastic https://helm.elastic.co
 helm repo update
 
 ## Install elasticsearch (2 replicas because we deploy 2 nodes) and kibana
-helm upgrade --install -n fluentd kibana elastic/kibana ##./helm-charts-elastic/kibana
-helm upgrade --install -n fluentd --set replicas=2 elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
-kubectl -n fluentd rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
-kubectl -n fluentd rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed
+helm upgrade --install -n efk kibana elastic/kibana ##./helm-charts-elastic/kibana
+helm upgrade --install -n efk --set replicas=2 elasticsearch elastic/elasticsearch ##./helm-charts-elastic/elasticsearch
+kubectl -n efk rollout status deployment.apps/kibana-kibana ## Waiting for kibana to be deployed
+kubectl -n efk rollout status statefulset.apps/elasticsearch-master ## Waiting for elasticsearch to be deployed
 
 ## Install fluentd
-helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n fluentd fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd
-kubectl -n fluentd rollout status daemonset.apps/fluentd ## Waiting for fluentd to be deployed
+helm upgrade --install -f ./helm-charts-fluentd/charts/fluentd/values.yaml -n efk fluentd fluent/fluentd ##./helm-charts-fluentd/charts/fluentd
+kubectl -n efk rollout status daemonset.apps/fluentd ## Waiting for fluentd to be deployed
 
-kubectl apply -f ./config/fluentd-virtualservice-azure.yaml ## Apply Virtualservice for fluentd
+kubectl apply -f ./config/efk-virtualservice-local.yaml ## Apply Virtualservice for fluentd
+
+################################################################################################################################################################
+
+cd ../rancher ## change directory to rancher folder
+
+## Deploy cert-manager
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml 
+
+## Waiting for cert-manager to deploy
+kubectl -n cert-manager rollout status deploy cert-manager
+kubectl -n cert-manager rollout status deploy cert-manager-webhook
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable && helm repo update ## Add rancher-stable helm repository and update it
+
+## Deploy rancher using helm in namespace cattle-system. Please specify domain name of Rancher using --set hostname option. At local machine, we will let Rancher generate its own self-sign certificate
+helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.localhost --wait
+
+## Waiting for rancher to deploy
+echo -e "\n -- Waiting for rancher to deploy --\n"
+kubectl -n cattle-system rollout status deployment.apps/rancher
+sleep 15
+kubectl -n fleet-system rollout status deployment.apps/fleet-controller
+sleep 15
+kubectl -n fleet-system rollout status deployment.apps/fleet-agent
+sleep 15
+kubectl -n rancher-operator-system rollout status deployment.apps/rancher-operator
+sleep 15
+kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
+echo -e "\n -- Successful !"
+
+kubectl apply -f ./config/rancher-virtualservice-local.yaml ### Apply Gateway and Virtualservice for rancher
 
 ################################################################################################################################################################
 
@@ -171,17 +212,18 @@ cd .. ## return back to cloud-native-platform folder
 
 echo -e "\n"
 echo -e "App                                            Link"
-echo -e "__________________________________             _____________________________________________"
-echo -e "excalidraw                     -->             https://excalidraw.infologistix-cnc.ddnss.org"
-echo -e "wekan                          -->             https://wekan.infologistix-cnc.ddnss.org"
-echo -e "Confluent View Control Center  -->             https://confluent.infologistix-cnc.ddnss.org"
-echo -e "druid                          -->             https://druid.infologistix-cnc.ddnss.org"
-echo -e "superset                       -->             https://superset.infologistix-cnc.ddnss.org"
-echo -e "elastic                        -->             https://elastic.infologistix-cnc.ddnss.org"
-echo -e "\nkiali                          -->             https://kiali.infologistix-cnc.ddnss.org"
-echo -e "prometheus                     -->             https://prometheus.infologistix-cnc.ddnss.org"
-echo -e "grafana                        -->             https://grafana.infologistix-cnc.ddnss.org"
-echo -e "jaeger                         -->             https://jaeger.infologistix-cnc.ddnss.org"
+echo -e "__________________________________             _________________________________"
+echo -e "excalidraw                     -->             https://excalidraw.localhost:4430"
+echo -e "wekan                          -->             https://wekan.localhost:4430"
+echo -e "Confluent View Control Center  -->             https://confluent.localhost:4430"
+echo -e "druid                          -->             https://druid.localhost:4430"
+echo -e "superset                       -->             https://superset.localhost:4430"
+echo -e "elastic                        -->             https://elastic.localhost:4430"
+echo -e "rancher                        -->             https://rancher.localhost:4430"
+echo -e "\nkiali                          -->             http://kiali.localhost:8081"
+echo -e "prometheus                     -->             http://prometheus.localhost:8081"
+echo -e "grafana                        -->             http://grafana.localhost:8081"
+echo -e "jaeger                         -->             http://jaeger.localhost:8081"
 
 ## kubectl get node -o=jsonpath="{.items[*]['status.capacity.memory']}"
 ## druid://druid:druid@druid-broker.druid:8082/druid/v2/sql

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: druid-operator
-  namespace: druid
+  namespace: druid ## install it in druid namespace
 spec:
   replicas: 1
   selector:

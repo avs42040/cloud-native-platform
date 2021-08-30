@@ -2,19 +2,19 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: superset
-  namespace: superset
+  namespace: superset ## Virtualservice will be deployed in the same namespace as superset
 spec:
   hosts:
-  - "superset.localhost"
+  - "superset.localhost" ## domain name of superset app
   gateways:
-  - istio-system/istio-ingress-gateway
+  - istio-system/istio-ingress-gateway ## Name of istio-gateway
   http:
   - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: superset.superset.svc.cluster.local
+        host: superset.superset.svc.cluster.local ## url of service of superset
         port:
           number: 8088
 

@@ -1,0 +1,22 @@
+## Virtualservice for running efk using helm in your local machine
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: efk-vs
+  namespace: efk ## Virtualservice will be deployed in the same namespace as efk
+spec:
+  hosts:
+  - "elastic.localhost" ## domain name of efk
+  gateways:
+  - istio-system/istio-ingress-gateway ## Name of istio-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: kibana-kibana.efk.svc.cluster.local ## url of service of kibana
+        port:
+          number: 5601
+
+

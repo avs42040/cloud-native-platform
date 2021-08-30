@@ -24,5 +24,8 @@ kubectl apply -f ./config/service.yaml ## create service for excalidraw deployme
 
 kubectl apply -f ./config/ingress-local.yaml ## create ingress-resource to enable excalidraw on cluster ip, port 80
 
-echo -e "excalidraw -->             http://localhost:8081"
+echo -e "\n"
+echo -e "App                        Link"
+echo -e "______________             ________________________________"
+echo -e "excalidraw -->             http://excalidraw.localhost:8081"
 

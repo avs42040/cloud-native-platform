@@ -9,5 +9,5 @@ spec:
     - excalidraw.infologistix-cnc.ddnss.org ## specify you domain name of your application here
   secretName: tls-secret-excalidraw ## name of the secret, in which tls-key and cert will be saved
   issuerRef:
-    name: letsencrypt-cluster-issuer
+    name: letsencrypt-cluster-issuer ## This must be the same as name of ClusterIssuer
     kind: ClusterIssuer

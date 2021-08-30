@@ -42,13 +42,13 @@ helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system 
 ## Waiting for rancher to deploy
 echo -e "\n -- Waiting for rancher to deploy --\n"
 kubectl -n cattle-system rollout status deployment.apps/rancher
-sleep 30
+sleep 40
 kubectl -n fleet-system rollout status deployment.apps/fleet-controller
-sleep 10
+sleep 15
 kubectl -n fleet-system rollout status deployment.apps/fleet-agent
-sleep 10
+sleep 15
 kubectl -n rancher-operator-system rollout status deployment.apps/rancher-operator
-sleep 10
+sleep 15
 kubectl -n cattle-system rollout status deployment.apps/rancher-webhook
 echo -e "\n -- Successful !"
 
@@ -62,7 +62,7 @@ kubectl apply -f ../cluster-config/istio-addons-gateway-azure.yaml ## Deploy Ist
 echo -e "\n"
 echo -e "App                        Link"
 echo -e "______________             _____________________________________________"
-echo -e "wekan      -->             https://rancher.infologistix-cnc.ddnss.org"
+echo -e "rancher    -->             https://rancher.infologistix-cnc.ddnss.org"
 echo -e "kiali      -->             https://kiali.infologistix-cnc.ddnss.org"
 echo -e "prometheus -->             https://prometheus.infologistix-cnc.ddnss.org"
 echo -e "grafana    -->             https://grafana.infologistix-cnc.ddnss.org"

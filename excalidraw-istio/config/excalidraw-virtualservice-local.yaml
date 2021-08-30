@@ -1,3 +1,4 @@
+## Virtualservice for exposing excalidraw service via port 80
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -11,10 +12,7 @@ spec:
   http:
   - match:
     - uri:
-        #prefix: /excalidraw
-        prefix: / # 
-    #rewrite:
-    #  uri: /
+        prefix: /
     route:
     - destination:
         host: excalidraw.excalidraw.svc.cluster.local # Service of excalidraw deployment
@@ -31,7 +29,3 @@ spec:
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL # Enable mutual TLS
-  #subsets: # Apply in case of canary deployment
-  #- name: v1
-  #  labels:
-  #    version: v1

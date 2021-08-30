@@ -4,16 +4,16 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: istio-ingress-gateway
-  namespace: istio-system
+  namespace: istio-system ## Gateway should be deployed in istio-system namespace
 spec:
   selector:
     istio: ingressgateway # use istio default controller
   servers:
-  - port:
+  - port: ## enable domain names on port 80
       number: 80
       name: http
       protocol: HTTP
-    hosts:
+    hosts: ## Add more domain names here
     - "excalidraw.infologistix-cnc.ddnss.org"
     - "wekan.infologistix-cnc.ddnss.org"
     - "confluent.infologistix-cnc.ddnss.org"
@@ -23,7 +23,7 @@ spec:
     - "elastic.infologistix-cnc.ddnss.org"
     - "hadoop.infologistix-cnc.ddnss.org"
     - "zeppelin.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on excalidraw domain name
       number: 443
       name: https-excalidraw
       protocol: HTTPS
@@ -32,7 +32,7 @@ spec:
       credentialName: tls-secret-excalidraw # must be the same as secret
     hosts:
     - "excalidraw.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on wekan domain name
       number: 443
       name: https-wekan
       protocol: HTTPS
@@ -41,7 +41,7 @@ spec:
       credentialName: tls-secret-wekan # must be the same as secret
     hosts:
     - "wekan.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on confluent domain name
       number: 443
       name: https-confluent
       protocol: HTTPS
@@ -50,7 +50,7 @@ spec:
       credentialName: tls-secret-confluent # must be the same as secret
     hosts:
     - "confluent.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on rancher domain name
       number: 443
       name: https-rancher
       protocol: HTTPS
@@ -59,7 +59,7 @@ spec:
       credentialName: tls-secret-rancher # must be the same as secret
     hosts:
     - "rancher.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on druid domain name
       number: 443
       name: https-druid
       protocol: HTTPS
@@ -68,7 +68,7 @@ spec:
       credentialName: tls-secret-druid # must be the same as secret
     hosts:
     - "druid.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on superset domain name
       number: 443
       name: https-superset
       protocol: HTTPS
@@ -77,7 +77,7 @@ spec:
       credentialName: tls-secret-superset # must be the same as secret
     hosts:
     - "superset.infologistix-cnc.ddnss.org"
-  - port:
+  - port: ## Enable tls on efk-stack domain name
       number: 443
       name: https-elastic
       protocol: HTTPS
@@ -86,21 +86,3 @@ spec:
       credentialName: tls-secret-elastic # must be the same as secret
     hosts:
     - "elastic.infologistix-cnc.ddnss.org"
-  - port:
-      number: 443
-      name: https-hadoop
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: tls-secret-hadoop # must be the same as secret
-    hosts:
-    - "hadoop.infologistix-cnc.ddnss.org"
-  - port:
-      number: 443
-      name: https-zeppelin
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: tls-secret-zeppelin # must be the same as secret
-    hosts:
-    - "zeppelin.infologistix-cnc.ddnss.org"

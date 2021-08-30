@@ -4,139 +4,94 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: istio-ingress-addon-gateway
-  namespace: istio-system
+  namespace: istio-system ## Gateway should be deployed in istio-system namespace
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingressgateway # use istio default controller
   servers:
-  - port:
+  - port: ## enable domain names on port 80
       number: 80
       name: http
       protocol: HTTP
-    hosts:
+    hosts: ## Add more domain names here
     - "grafana.localhost"
     - "kiali.localhost"
     - "prometheus.localhost"
     - "jaeger.localhost"
----
+
 ######################################################### Grafana #############################################################
+## Virtualservice for Grafana service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: grafana-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "grafana.localhost"
+  - "grafana.localhost" ## domain name of grafana
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: grafana
+        host: grafana ## Name of the service
         port:
           number: 3000
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: grafana
-  namespace: istio-system
-spec:
-  host: grafana
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----      
+
 ######################################################### Kiali #############################################################
+## Virtualservice for Kiali service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: kiali-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "kiali.localhost"
+  - "kiali.localhost" ## domain name of kiali
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
-  - match:
-    - uri:
-        prefix: /
-    #rewrite:
-    #  uri: /kiali
-    route:
+  - route:
     - destination:
-        host: kiali
+        host: kiali ## Name of the service
         port:
           number: 20001
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: kiali
-  namespace: istio-system
-spec:
-  host: kiali
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----
 ######################################################### prometheus #############################################################
+## Virtualservice for Prometheus service
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: prometheus-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "prometheus.localhost"
+  - "prometheus.localhost" ## domain name of prometheus
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: prometheus
+        host: prometheus ## Name of the service
         port:
           number: 9090
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: prometheus
-  namespace: istio-system
-spec:
-  host: prometheus
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----
 ######################################################### jaeger #############################################################
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: jaeger-vs
-  namespace: istio-system
+  namespace: istio-system ## We define virtualservice in istio-system namespace since istio-addons are deployed in istio-system namespace
 spec:
   hosts:
-  - "jaeger.localhost"
+  - "jaeger.localhost" ## domain name of jaeger
   gateways:
-  - istio-ingress-addon-gateway
+  - istio-ingress-addon-gateway ## Name of istio-gateway
   http:
   - route:
     - destination:
-        host: tracing
+        host: tracing ## Name of the service
         port:
           number: 80
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: jaeger
-  namespace: istio-system
-spec:
-  host: jaeger
-  trafficPolicy:
-    tls:
-      mode: DISABLE
----

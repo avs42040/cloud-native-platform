@@ -1,4 +1,4 @@
-# deploy single node zookeeper
+# deploy single node zookeeper in druid namespace
 apiVersion: v1
 kind: Service
 metadata:

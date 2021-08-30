@@ -4,26 +4,26 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: istio-ingress-gateway
-  namespace: istio-system
+  namespace: istio-system ## Gateway should be deployed in istio-system namespace
 spec:
   selector:
     istio: ingressgateway # use istio default controller
   servers:
-  - port:
+  - port: ## enable domain names on port 80
       number: 80
       name: http
       protocol: HTTP
-    hosts:
+    hosts: ## Add more domain names here
     - "excalidraw.localhost"
     - "wekan.localhost"
+    - "confluent.localhost"
     - "rancher.localhost"
     - "druid.localhost"
     - "superset.localhost"
     - "elastic.localhost"
     - "hadoop.localhost"
     - "zeppelin.localhost"
-
-  - port:
+  - port: ## Enable tls on excalidraw domain name
       number: 443
       name: https-excalidraw
       protocol: HTTPS
@@ -32,7 +32,7 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "excalidraw.localhost"
-  - port:
+  - port: ## Enable tls on wekan domain name
       number: 443
       name: https-wekan
       protocol: HTTPS
@@ -41,7 +41,16 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "wekan.localhost"
-  - port:
+  - port: ## Enable tls on confluent domain name
+      number: 443
+      name: https-confluent
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret # must be the same as secret
+    hosts:
+    - "confluent.localhost"
+  - port: ## Enable tls on rancher domain name
       number: 443
       name: https-rancher
       protocol: HTTPS
@@ -50,7 +59,7 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "rancher.localhost"
-  - port:
+  - port: ## Enable tls on druid domain name
       number: 443
       name: https-druid
       protocol: HTTPS
@@ -59,7 +68,7 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "druid.localhost"
-  - port:
+  - port: ## Enable tls on superset domain name
       number: 443
       name: https-superset
       protocol: HTTPS
@@ -68,7 +77,7 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "superset.localhost"
-  - port:
+  - port: ## Enable tls on efk-stack domain name
       number: 443
       name: https-elastic
       protocol: HTTPS
@@ -77,22 +86,4 @@ spec:
       credentialName: tls-secret # must be the same as secret
     hosts:
     - "elastic.localhost"
-  - port:
-      number: 443
-      name: https-hadoop
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: tls-secret # must be the same as secret
-    hosts:
-    - "hadoop.localhost"
-  - port:
-      number: 443
-      name: https-zeppelin
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: tls-secret # must be the same as secret
-    hosts:
-    - "zeppelin.localhost"
 

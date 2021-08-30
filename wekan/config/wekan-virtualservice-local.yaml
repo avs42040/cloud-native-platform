@@ -11,10 +11,7 @@ spec:
   http:
   - match:
     - uri:
-        #prefix: /wekan
         prefix: /
-#    rewrite:
-#      uri: /sign-in
     route:
     - destination:
         host: wekan.wekan-project.svc.cluster.local ## url of service of wekan

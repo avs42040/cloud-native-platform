@@ -1,4 +1,4 @@
-## Create kafka-components using kafka-operator 
+## Create components of confluent using operator 
 
 apiVersion: platform.confluent.io/v1beta1
 kind: Zookeeper
@@ -35,7 +35,7 @@ metadata:
 spec:
   replicas: 1
   image:
-    application: nurihaji/cp-server-connect-operator-custom:6.1.0.0 ## This is private docker image of author. Please feel free to use yours (to create this image, please refer to README.md)
+    application: nurihaji/cp-server-connect-operator-custom:6.1.0.0 ## This is private docker image of author, built using dockerfile in folder confluent --> please feel free to use yours (to create this image, please refer to README.md)
     init: confluentinc/cp-init-container-operator:6.1.0.0
   dependencies:
     kafka:

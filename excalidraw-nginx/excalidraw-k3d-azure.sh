@@ -30,6 +30,9 @@ kubectl -n cert-manager rollout status deploy cert-manager-webhook
 
 kubectl apply -f ./config/cert-issuer-nginx-ingress.yaml ## Create clusterissuer for the certificates
 kubectl apply -f ./config/certificate.yaml ## request for the certificates
-kubectl apply -f ./config/ingress-azure.yaml ## create ingress resource
+kubectl apply -f ./config/ingress-azure.yaml ## create ingress-resource to enable excalidraw on cluster ip, port 80
 
+echo -e "\n"
+echo -e "App                        Link"
+echo -e "______________             _______________________________________________"
 echo -e "excalidraw -->             https://excalidraw.infologistix-cnc.ddnss.org\n"

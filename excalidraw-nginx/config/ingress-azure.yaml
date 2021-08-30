@@ -1,3 +1,4 @@
+## Ingress resource to expose excalidraw deployment from azure cloud
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -5,9 +6,9 @@ metadata:
     kubernetes.io/ingress.class: "nginx" # comment this out, if you want to use traefik instead
     nginx.ingress.kubernetes.io/rewrite-target: /
   name: excalidraw
-  namespace: excalidraw
+  namespace: excalidraw ## ingress resource must be deployed in the same namespace as excalidraw
 spec:
-  tls:
+  tls: ## enable tls
   - hosts:
     - excalidraw.infologistix-cnc.ddnss.org ## domain name of excalidraw
     secretName: tls-secret-excalidraw ## name of the secret, in which contain tls-key and tls-cert

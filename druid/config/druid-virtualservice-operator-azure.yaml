@@ -3,19 +3,19 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: druid
-  namespace: druid
+  namespace: druid ## Virtualservice will be deployed in the same namespace as druid
 spec:
   hosts:
-  - "druid.infologistix-cnc.ddnss.org"
+  - "druid.infologistix-cnc.ddnss.org" ## domain name of druid
   gateways:
-  - istio-system/istio-ingress-gateway
+  - istio-system/istio-ingress-gateway ## Name of istio-gateway
   http:
   - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: druid-tiny-cluster-routers.druid.svc.cluster.local
+        host: druid-tiny-cluster-routers.druid.svc.cluster.local ## url of service of druid-router
         port:
           number: 8088
 

@@ -1,4 +1,4 @@
-## This YAML-file will generate Issuer for requesting certificate from Letsencrypt
+## This yaml-file will generate Issuer for requesting certificate from Letsencrypt
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -12,4 +12,4 @@ spec:
     solvers:
     - http01:
        ingress:
-         class: nginx
+         class: nginx # Certificate will be requested through nginx

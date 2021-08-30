@@ -1,6 +1,6 @@
 #! /bin/bash
 
-## This script adds druid-connector to sink data from kafka-topic in confluent
+## This script adds druid-connector to sink data from kafka-topics in confluent storing data from mongodb of wekan
 
 kubectl exec -it -n confluent connect-0 -- curl -X POST -H "Content-Type: application/json" --data '
   {
