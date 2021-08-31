@@ -23,7 +23,8 @@ You need ubuntu machine with
 - kubectl 
 - helm
 - k3d
-- istioctl 
+- istioctl
+ 
 installed. You also need accessible and valid domain name, which can be accessed through internet and its associated tls-keys and certificates. At least port 80 and 443 are needed to be opened to expose the services.
 
 IMPORTANT!! -> To deploy applications in the cloud, you NEED to adjust all virtualservices and ingress resources to point to your domain name and provide their associated tls-certificates in tls-secret.yaml under folder cluster-config, Otherwise IT WILL NOT WORK!
@@ -46,26 +47,7 @@ Every application (export confluent) we wrote scripts separately for deploying i
 
 # Additional information
 - This demo only use k3d to deploy all services in kuberneter, because it comes up with loadbalancer service and easy to be created and destroyed. Please feel free use these scripts as a reference to deploy the services in your own kubernetes cluster, if you have one. 
-- We also prepare a script called "run-all.sh" to run our main demo. For more detail, please refer to README in folder cluster-config.
 - For every applications exposed using istio-gateway, we will also deployed istio-addons. Istio-addons include Kiali, Grafana, Tracing (Jaeger) and Prometheus. They will help us to collect metrics provided by prometheus and visualize them via Kiali and Grafana.
-
-## Authors
-
-* **Suphanat Aviphan** - IT Consultant - Infologistix GmbH 
-
-If you have other suggestion of how we can improve the demo, plase feel free to reach us.
-
-HAVE FUN !!
-
-
-
-
-
-
-
-
-
-
 
 # Our main demo
 
@@ -130,3 +112,23 @@ For every application in this demo, you can just run this command to delete the 
 ```bash
 k3d cluster delete
 ```
+
+# Authors
+
+* **Suphanat Aviphan** - IT Consultant - Infologistix GmbH 
+
+If you have other suggestion of how we can improve the demo, plase feel free to reach us.
+
+HAVE FUN !!
+
+
+
+
+
+
+
+
+
+
+
+
