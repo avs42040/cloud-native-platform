@@ -20,7 +20,7 @@ This subfolder contains all configuration files of superset-helm including value
 
 ## superset-k3d-azure.sh (script)
 This script is used to deploy superset in azure cloud environment.
-To deploy superset in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy superset in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./superset-k3d-azure.sh
@@ -28,7 +28,7 @@ To deploy superset in k3d-cluster in azure cloud, just run this command in this 
 
 ## superset-k3d-local.sh (script)
 This script is used to deploy superset in your local environment.
-To deploy superset in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy superset in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./superset-k3d-local.sh

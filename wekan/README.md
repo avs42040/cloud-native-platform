@@ -17,7 +17,7 @@ This subfolder contains all yaml-configuration files used to install istio-addon
 
 ## wekan-k3d-azure.sh (script)
 This script is used to deploy wekan and mongodb in azure cloud environment.
-To deploy wekan in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy wekan in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./wekan-k3d-azure.sh
@@ -25,7 +25,7 @@ To deploy wekan in k3d-cluster in azure cloud, just run this command in this in 
 
 ## wekan-k3d-local.sh (script)
 This script is used to deploy wekan and mongodb in your local environment.
-To deploy wekan in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy wekan in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./wekan-k3d-local.sh

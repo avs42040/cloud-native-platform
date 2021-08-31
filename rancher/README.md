@@ -18,7 +18,7 @@ This script will install rancher using docker.
 
 ## rancher-k3d-azure-traefik.sh (script)
 This script is used to deploy rancher in azure cloud environment using Traefik. 
-To deploy rancher in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy rancher in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./rancher-k3d-azure-traefik.sh
@@ -26,7 +26,7 @@ To deploy rancher in k3d-cluster in azure cloud, just run this command in this i
 
 ## rancher-k3d-local-traefik.sh (script)
 This script is used to deploy rancher in your local environment using Traefik.
-To deploy rancher in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy rancher in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./rancher-k3d-local-traefik.sh
@@ -34,7 +34,7 @@ To deploy rancher in k3d-cluster in your local machine, just run this command in
 
 ## rancher-k3d-azure-istio.sh (script)
 This script is used to deploy rancher in azure cloud environment using Istio-gateway. 
-To deploy rancher in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy rancher in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./rancher-k3d-azure-istio.sh
@@ -42,7 +42,7 @@ To deploy rancher in k3d-cluster in azure cloud, just run this command in this i
 
 ## rancher-k3d-local-istio.sh (script)
 This script is used to deploy rancher in your local environment using Istio-gateway.
-To deploy rancher in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy rancher in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./rancher-k3d-local-istio.sh

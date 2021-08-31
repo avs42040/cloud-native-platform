@@ -31,7 +31,7 @@ This subfolder contains all component of druid-helm including values.yaml
 
 ## druid-helm-k3d-azure.sh (script)
 This script is used to deploy druid in azure cloud environment using helm. 
-To deploy druid in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy druid in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./druid-helm-k3d-azure.sh
@@ -39,7 +39,7 @@ To deploy druid in k3d-cluster in azure cloud, just run this command in this in 
 
 ## druid-helm-k3d-local.sh (script)
 This script is used to deploy druid in your local machine using helm. 
-To deploy druid in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy druid in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./druid-helm-k3d-local.sh
@@ -47,7 +47,7 @@ To deploy druid in k3d-cluster in your local machine, just run this command in t
 
 ## druid-operator-k3d-azure.sh (script)
 This script is used to deploy druid in azure cloud environment using operator. 
-To deploy druid in k3d-cluster in azure cloud, jjust run this command in this in this folder -->
+To deploy druid in k3d-cluster in azure cloud, jjust run this command in this folder -->
 
 ```bash
 ./druid-operator-k3d-azure.sh
@@ -55,7 +55,7 @@ To deploy druid in k3d-cluster in azure cloud, jjust run this command in this in
 
 ## druid-operator-k3d-local.sh (script)
 This script is used to deploy druid in your local machine using operator. 
-To deploy druid in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy druid in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./druid-operator-k3d-local.sh

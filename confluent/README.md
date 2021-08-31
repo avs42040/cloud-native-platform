@@ -35,7 +35,7 @@ This script will create kafka-topics to store data from mongodb of wekan and cre
 
 ## confluent-k3d-azure.sh (script)
 This script is used to deploy istio and confluent in azure cloud environment. 
-To deploy confluent in k3d-cluster in azure cloud, just cd into this folder and run
+To deploy confluent in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./confluent-k3d-azure.sh
@@ -43,7 +43,7 @@ To deploy confluent in k3d-cluster in azure cloud, just cd into this folder and 
 
 ## confluent-k3d-local.sh (script)
 This script is used to deploy istio and confluent in your local machine. 
-To deploy confluent in k3d-cluster in your local machine, just cd into this folder and run
+To deploy confluent in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./confluent-k3d-local.sh

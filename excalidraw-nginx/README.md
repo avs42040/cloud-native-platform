@@ -17,7 +17,7 @@ This subfolder contains all yaml-configuration files, which are needed to deploy
 ## excalidraw-k3d-azure.sh (script)
 
 This script is used to deploy excalidraw in azure cloud environment. 
-To deploy excalidraw in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy excalidraw in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./excalidraw-k3d-azure.sh
@@ -26,7 +26,7 @@ To deploy excalidraw in k3d-cluster in azure cloud, just run this command in thi
 ## excalidraw-k3d-local.sh (script)
 
 This script is used to deploy excalidraw in your local environment.
-To deploy excalidraw in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy excalidraw in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./excalidraw-k3d-local.sh

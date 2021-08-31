@@ -18,7 +18,7 @@ Contain all relevant configuration files of helm-chart of fluentd, elasticsearch
 
 ## efk-k3d-azure.sh (script)
 This script is used to deploy EFK-stack in azure cloud environment. 
-To deploy EFK-stack in k3d-cluster in azure cloud, just run this command in this in this folder -->
+To deploy EFK-stack in k3d-cluster in azure cloud, just run this command in this folder -->
 
 ```bash
 ./efk-k3d-azure.sh
@@ -26,7 +26,7 @@ To deploy EFK-stack in k3d-cluster in azure cloud, just run this command in this
 
 ## efk-k3d-local.sh (script)
 This script is used to deploy EFK-stack in your local environment.
-To deploy EFK-stack in k3d-cluster in your local machine, just run this command in this in this folder -->
+To deploy EFK-stack in k3d-cluster in your local machine, just run this command in this folder -->
 
 ```bash
 ./efk-k3d-local.sh

@@ -18,7 +18,13 @@ We prepare scripts to deploy applications in k3d-cluster in cloud and local mach
 You need ubuntu machine with docker, kubectl, helm, k3d and istioctl installed. If you use window, you can use virtual machine with your prefered tool or WSL to run ubuntu machine.
 
 ## Requirements for running in the cloud
-You need ubuntu machine with docker, kubectl, helm, k3d and istioctl installed. You also need accessible and valid domain name, which can be access through internet and its associated tls-keys and certificates. At least port 80 and 443 are needed to be opened to expose the services.
+You need ubuntu machine with 
+- docker
+- kubectl 
+- helm
+- k3d
+- istioctl 
+installed. You also need accessible and valid domain name, which can be accessed through internet and its associated tls-keys and certificates. At least port 80 and 443 are needed to be opened to expose the services.
 
 IMPORTANT!! -> To deploy applications in the cloud, you NEED to adjust all virtualservices and ingress resources to point to your domain name and provide their associated tls-certificates in tls-secret.yaml under folder cluster-config, Otherwise IT WILL NOT WORK!
 
@@ -27,12 +33,6 @@ Ps. If any binary is missing and you want to quickly install it, we prepare scri
 # How to Getting Started
 Each subfolder in this folder except "cluster-config" and "installation" folders will be named after the name of the application, which can be deployed using scripts in the folder. You can further read more about how to deploy each appllication in README of each folder
 
-## How to clean up the project
-For every application in this demo, you can just run this command to delete the cluster and clear all resources and docker container deploying k3d-cluster.
-
-```bash
-k3d cluster delete
-```
 # Information about scripts
 Every application (export confluent) we wrote scripts separately for deploying in cloud and local machine. Their main differences are
 
@@ -69,51 +69,64 @@ HAVE FUN !!
 
 # Our main demo
 
-why this demo
+We have created scripts (run-demo-azure.sh, run-demo-local.sh, run-all-azure.sh and run-all-local.sh) to deploy our demo. run-demo-azure.sh and run-demo-local.sh scripts are used to deploy only our demo, which including wekan, confluent, druid and superset. run-all-azure.sh and run-all-local.sh are used to run every applications we provided, also including excalidraw, rancher and efk-stack. You will be able to see power of istio together with its addons kiali, which can help us to visualize communications between services. You can choose to run only our demo or every application.
 
-what will be deploy in this demo
-
-how component communicate with each other 
-- create something in wekan and see how data are transfer to kafka-topic
-- confluent we will install connector and create kafka-topic. After that you will see data transfer from mongodb to kafka-topic
-- we will also install druid. Druid-MiddleManager will consumer data from kafka-topic using druid-connector we install using script "druid-ingestion.sh" folder druid.
-- superset can also ingest the data from druid. With superset, you can explore and visual the data at next level       
-
-
-cluster-config folder also contains scripts "run-all-azure.sh" and "run-all-local.sh" to run our demo, which we will explain it in the next section.
-
-Its contains
-
-which app is a must, and which one is optional
-
-- excalidraw
-- efk-stack
-- rancher
-
+## why this demo and how the components all work together
+We choose to deploy
 - wekan
 - confluent
 - druid
 - superset
 
-## Explain script of our demo
+together for our demo, because they can work together.
 
-- start deploy k3d without traefik because we will use istio
-- create all namespace we need and inject label "istio-injection=enabled" to enable envoy as sidecar container for all pods in that particular namespace. So we can visualize the communication of service via kiali later on
-- Install istio-addons (Kiali, Grafana, Prometheus, Jaeger)
-- deploy istio-gateway for all services in the demo
-- Install wekan, confluent, druid, superset,excalidraw, efk-stack, rancher
-- Then you will be able to access the applications with the links described in the run-all script.
+Since wekan storage its data in collections of mongodb and confluent has kafka-connect, it is possible to use kafka-connect to consume the data from mongodb and storage them in kafka-topic in real-time. We will also create kafka-topics and install connector to use it to bind mongodb collection together with kafka-topics, so the data can be started to transfer. The data from each collection will be stored in each kafka-topic. You can test it by creating some instances in wekan and see which data is produced and transfered.
 
+Apache Druid also has its connector to consume data from kafka-topic. Druid-MiddleManager will consumer data from kafka-topic using druid-connector we install using script "druid-ingestion.sh" folder druid in real-time. You can confirm its connectivity by either look in the druid database or in kiali, in which it should show connecting line between druid middlemanager and kafka-instance.
 
+At last, we can manually ingest data from druid to apache superset instance, which we will also deployed in this demo. At this point, if you create something in wekan, the data should be replicated through the whole pipeline upto superset within 10 second or less.
 
-run run-all.sh
+# Hardware requirements
+The requirements are similar as deploying other application. This demo need at least 32 Gb of RAM and about 20 minutes for the deployment. If you wanted to deploy every applications, you need 64 Gb of RAM and about 35 minutes.
 
-run the whole process  RAM 64 Gb CPU 8
+# To run this demo
+There are scripts run-demo-azure.sh, run-demo-local.sh, run-all-azure.sh and run-all-local.sh.
 
-we provide script to run our demo on both local machine and azure vm. But please do not forget to provide ENOUGH RESOURCE, if you run it on your local machine
-If you don't want to deploy specific application in the demo, please comment that part of code out. But we suggest to deploy the whole demo to see how powerful istio is when you deploy many application in the cluster
-It might take around 25-30 min to deploy run-all.sh
+### run-demo-azure.sh (script)
+This script is used to start the demo in azure vm including wekan, confluent, druid and superset. We explain each step using comments in the script.
+To deploy the demo in k3d-cluster in azure vm, just run this command in this folder -->
 
-to clear up demo run k3d cluster delete
+```bash
+./run-demo-azure.sh
+```
 
+### run-demo-local.sh (script)
+This script is used to start the demo in local machine including wekan, confluent, druid and superset. We explain each step using comments in the script.
+To deploy the demo in k3d-cluster in local machine, just run this command in this folder -->
 
+```bash
+./run-demo-local.sh
+```
+
+### run-all-azure.sh (script)
+This script is used to start every applications in azure vm including wekan, confluent, druid, superset, excalidraw, rancher and efk-stack. We explain each step using comments in the script.
+To deploy every applications in k3d-cluster in azure vm, just run this command in this folder -->
+
+```bash
+./run-all-azure.sh
+```
+
+### run-all-local.sh (script)
+This script is used to start every applications in local machine including wekan, confluent, druid, superset, excalidraw, rancher and efk-stack. We explain each step using comments in the script.
+To deploy every applications in k3d-cluster in azure vm, just run this command in this folder -->
+
+```bash
+./run-all-local.sh
+```
+
+## How to clean up the project
+For every application in this demo, you can just run this command to delete the cluster and clear all resources and docker container deploying k3d-cluster.
+
+```bash
+k3d cluster delete
+```
